@@ -21,6 +21,14 @@ critics={'Lisa Rose': {'Lady in the Water': 2.5, 'Snakes on a Plane': 3.5,
 
 from math import sqrt
 
+# Returns a Tanimoto similarity score for person1 and person2
+# Note: Tanimoto can only judge if 0/1
+def sim_tanimoto(prefs, person1, person2):
+  si = []
+  for item in prefs[person1]:
+    if item in prefs[person2]: si.append(item)
+  return len(si) / (len(prefs[person1]) + len(prefs[person2]) - len(si))
+
 # Returns a distance-based similarity score for person1 and person2
 def sim_distance(prefs,person1,person2):
   # Get the list of shared_items
@@ -178,3 +186,12 @@ def loadMovieLens(path='/data/movielens'):
     prefs.setdefault(user,{})
     prefs[user][movies[movieid]]=float(rating)
   return prefs
+
+print sim_tanimoto(critics,'Lisa Rose','Claudia Puig')
+print sim_tanimoto(critics,'Lisa Rose','Toby')
+
+print sim_distance(critics,'Lisa Rose','Claudia Puig')
+print sim_distance(critics,'Lisa Rose','Toby')
+
+print sim_pearson(critics,'Lisa Rose','Claudia Puig')
+print sim_pearson(critics,'Lisa Rose','Toby')
