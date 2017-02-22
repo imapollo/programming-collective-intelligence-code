@@ -187,6 +187,56 @@ def loadMovieLens(path='/data/movielens'):
     prefs[user][movies[movieid]]=float(rating)
   return prefs
 
+def topMatchPerson(prefs, person, similarity=sim_pearson):
+  scorePersonMap = {}
+  for another_person in prefs:
+    score = similarity(prefs, person, another_person)
+    if (person != another_person):
+      scorePersonMap[score] = another_person
+  scores = scorePersonMap.keys()
+  scores.sort()
+  scores.reverse()
+  top5Person = []
+  i = 0
+  while (i < 5):
+    top5Person.append(scorePersonMap[scores[i]])
+    i += 1
+  return top5Person
+
+# Gets recommendations for a person by using a weighted average
+# of every other user's rankings
+def getRecommendationsByTop5Person(prefs,person,similarity=sim_pearson):
+  totals={}
+  simSums={}
+  top5 = topMatchPerson(prefs, person)
+  for other in prefs:
+    if other not in top5: continue
+    # don't compare me to myself
+    if other==person: continue
+    sim=similarity(prefs,person,other)
+
+    # ignore scores of zero or lower
+    if sim<=0: continue
+    for item in prefs[other]:
+      # only score movies I haven't seen yet
+      if item not in prefs[person] or prefs[person][item]==0:
+        # Similarity * Score
+        totals.setdefault(item,0)
+        totals[item]+=prefs[other][item]*sim
+        # Sum of similarities
+        simSums.setdefault(item,0)
+        simSums[item]+=sim
+
+  # Create the normalized list
+  rankings=[(total/simSums[item],item) for item,total in totals.items()]
+
+  # Return the sorted list
+  rankings.sort()
+  rankings.reverse()
+  return rankings
+
+# exercise 1
+
 print sim_tanimoto(critics,'Lisa Rose','Claudia Puig')
 print sim_tanimoto(critics,'Lisa Rose','Toby')
 
@@ -195,3 +245,7 @@ print sim_distance(critics,'Lisa Rose','Toby')
 
 print sim_pearson(critics,'Lisa Rose','Claudia Puig')
 print sim_pearson(critics,'Lisa Rose','Toby')
+
+# exercise 3
+
+print getRecommendationsByTop5Person(critics, 'Toby')
