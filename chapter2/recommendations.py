@@ -187,6 +187,28 @@ def loadMovieLens(path='/data/movielens'):
     prefs[user][movies[movieid]]=float(rating)
   return prefs
 
+def topMatchPerson(prefs, person, similarity=sim_pearson):
+  scorePersonMap = {}
+  for another_person in prefs:
+    score = similarity(prefs, person, another_person)
+    if (person != another_person):
+      scorePersonMap[score] = another_person
+  scores = scorePersonMap.keys()
+  scores.sort()
+  scores.reverse()
+  top5Person = []
+  i = 0
+  while (i < 5):
+    top5Person.append(scorePersonMap[scores[i]])
+    i += 1
+  print top5Person
+
+def constructItemMatch(prefs):
+  for person in prefs:
+    topMatchPerson(prefs, person)
+
+# exercise 1
+
 print sim_tanimoto(critics,'Lisa Rose','Claudia Puig')
 print sim_tanimoto(critics,'Lisa Rose','Toby')
 
@@ -195,3 +217,6 @@ print sim_distance(critics,'Lisa Rose','Toby')
 
 print sim_pearson(critics,'Lisa Rose','Claudia Puig')
 print sim_pearson(critics,'Lisa Rose','Toby')
+
+# exercise 3
+constructItemMatch(critics)
