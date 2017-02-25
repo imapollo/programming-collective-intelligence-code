@@ -30,6 +30,7 @@ def getwords(html):
   return [word.lower() for word in words if word!='']
 
 
+# word count appears in blogs
 apcount={}
 wordcounts={}
 feedlist=[line for line in file('feedlist.txt')]
@@ -42,11 +43,13 @@ for feedurl in feedlist:
       if count>1:
         apcount[word]+=1
   except:
-    print 'Failed to parse feed %s' % feedurl
+    print 'Failed to parse feed %s' % feedurl.strip()
 
 wordlist=[]
 for w,bc in apcount.items():
   frac=float(bc)/len(feedlist)
+  # only consider the words between 10% - 50%
+  # not considering the words like 'the', and 'film-flam'
   if frac>0.1 and frac<0.5:
     wordlist.append(w)
 
