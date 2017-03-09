@@ -16,8 +16,15 @@ def readfile(filename):
     data.append([float(x) for x in p[1:]])
   return rownames,colnames,data
 
-
 from math import sqrt
+
+def o_distance(v1,v2):
+  i = 0
+  sum = 0
+  for sv1 in v1:
+    sum += pow(sv1 + v2[0],2)
+    i += 1
+  return (sum - 1) / (50000 - 1)
 
 def pearson(v1,v2):
   # Simple sums
@@ -293,4 +300,7 @@ with open('blogdata2.txt', 'r') as file:
       except ValueError:
         pass
     rows.append(the_row)
-  print kcluster(rows)
+  # print kcluster(rows)
+  # it is not strange, why cannot cluster any ...
+  # http://www.zhaokv.com/2016/01/normalization-and-standardization.html
+  print kcluster(rows, distance=o_distance, k=8)
