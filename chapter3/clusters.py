@@ -1,4 +1,5 @@
 from PIL import Image,ImageDraw
+import sys
 
 def readfile(filename):
   lines=[line for line in file(filename)]
@@ -171,6 +172,7 @@ def rotatematrix(data):
 
 import random
 
+# TODO: understand kcluster and hcluster
 def kcluster(rows,distance=pearson,k=4):
   # Determine the minimum and maximum values for each point
   ranges=[(min([row[i] for row in rows]),max([row[i] for row in rows])) 
@@ -278,3 +280,8 @@ def draw2d(data,labels,jpeg='mds2d.jpg'):
     y=(data[i][1]+0.5)*1000
     draw.text((x,y),labels[i],(0,0,0))
   img.save(jpeg,'JPEG')  
+
+with open('blogdata2.txt', 'r') as file:
+  # hcluster(file.readlines())
+  rows = [(row.split('\t')) for row in file.readlines()]
+  kcluster(rows)
