@@ -201,6 +201,7 @@ def topMatchPerson(prefs, person, similarity=sim_pearson):
   while (i < 5):
     top5Person.append(scorePersonMap[scores[i]])
     i += 1
+<<<<<<< HEAD
   return top5Person
 
 # Gets recommendations for a person by using a weighted average
@@ -235,6 +236,10 @@ def getRecommendationsByTop5Person(prefs,person,similarity=sim_pearson):
   rankings.reverse()
   return rankings
 
+def constructItemMatch(prefs):
+  for person in prefs:
+    topMatchPerson(prefs, person)
+
 # exercise 1
 
 print sim_tanimoto(critics,'Lisa Rose','Claudia Puig')
@@ -249,3 +254,5 @@ print sim_pearson(critics,'Lisa Rose','Toby')
 # exercise 3
 
 print getRecommendationsByTop5Person(critics, 'Toby')
+
+constructItemMatch(critics)
