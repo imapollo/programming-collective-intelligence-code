@@ -16,15 +16,24 @@ def readfile(filename):
     data.append([float(x) for x in p[1:]])
   return rownames,colnames,data
 
-from math import sqrt
+from math import sqrt, fabs
+
+# http://baike.baidu.com/item/%E6%9B%BC%E5%93%88%E9%A1%BF%E8%B7%9D%E7%A6%BB
+def manhattan(v1,v2):
+  i = 0
+  sum = 0
+  for sv1 in v1:
+    sum += fabs(sv1 - v2[0])
+    i += 1
+  return sum
 
 def o_distance(v1,v2):
   i = 0
   sum = 0
   for sv1 in v1:
-    sum += pow(sv1 + v2[0],2)
+    sum += pow(sv1 - v2[0],2)
     i += 1
-  return (sum - 1) / (50000 - 1)
+  return sqrt(sum)
 
 def pearson(v1,v2):
   # Simple sums
@@ -287,7 +296,7 @@ def draw2d(data,labels,jpeg='mds2d.jpg'):
     draw.text((x,y),labels[i],(0,0,0))
   img.save(jpeg,'JPEG')  
 
-with open('blogdata2.txt', 'r') as file:
+with open('zebo.txt', 'r') as file:
   # hcluster(file.readlines())
   lines = file.readlines()
   lines.pop(0)
@@ -300,7 +309,7 @@ with open('blogdata2.txt', 'r') as file:
       except ValueError:
         pass
     rows.append(the_row)
-  # print kcluster(rows)
+  print kcluster(rows, distance=manhattan)
   # it is not strange, why cannot cluster any ...
   # http://www.zhaokv.com/2016/01/normalization-and-standardization.html
-  print kcluster(rows, distance=o_distance, k=8)
+  # print kcluster(rows, distance=o_distance, k=8)
