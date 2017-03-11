@@ -3,3 +3,4 @@
 #3 why switch to o distance, then cannot kcluster any more
 #4 manhantan almost the same as o distance
 #5 better understand to the kcluster function
+#6 k > 25 has little impacts on the sum distance (pearson)

@@ -198,8 +198,10 @@ def kcluster(rows,distance=pearson,k=4):
   for i in range(len(rows[0]))] for j in range(k)]
   
   lastmatches=None
+  distance_sum = 0
   for t in range(100):
-    print 'Iteration %d' % t
+    distance_sum = 0
+    # print 'Iteration %d' % t
     bestmatches=[[] for i in range(k)]
     
     # Find which centorid is the closest for each row
@@ -210,7 +212,8 @@ def kcluster(rows,distance=pearson,k=4):
         d=distance(clusters[i],row)
         if d<distance(clusters[bestmatch],row):
           bestmatch=i
-      print "best match for row[%s] in cluster[%s] [%s]" % (j, bestmatch, distance(clusters[bestmatch],row))
+      # print "best match for row[%s] in cluster[%s] [%s]" % (j, bestmatch, distance(clusters[bestmatch],row))
+      distance_sum += distance(clusters[bestmatch],row)
       bestmatches[bestmatch].append(j)
 
     # If the results are the same as last time, this is complete
@@ -229,9 +232,10 @@ def kcluster(rows,distance=pearson,k=4):
         clusters[i]=avgs
 
   v = 0
-  for cluster in clusters:
-    print "Center of cluster[%s]: %s" % (v, cluster)
-    v += 1
+  # for cluster in clusters:
+  #   print "Center of cluster[%s]: %s" % (v, cluster)
+  #   v += 1
+  print "Sum distance for k[%s] is [%s]" % (k, distance_sum)
   return bestmatches
 
 def tanamoto(v1,v2):
@@ -315,7 +319,9 @@ with open('zebo.txt', 'r') as file:
       except ValueError:
         pass
     rows.append(the_row)
-  print kcluster(rows)
+  # print kcluster(rows)
   # it is not strange, why cannot cluster any ...
   # http://www.zhaokv.com/2016/01/normalization-and-standardization.html
   # print kcluster(rows, distance=o_distance, k=8)
+  for k in range(4,50):
+    kcluster(rows, k=k)
