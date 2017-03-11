@@ -202,13 +202,15 @@ def kcluster(rows,distance=pearson,k=4):
     print 'Iteration %d' % t
     bestmatches=[[] for i in range(k)]
     
-    # Find which centroid is the closest for each row
+    # Find which centorid is the closest for each row
     for j in range(len(rows)):
       row=rows[j]
       bestmatch=0
       for i in range(k):
         d=distance(clusters[i],row)
-        if d<distance(clusters[bestmatch],row): bestmatch=i
+        if d<distance(clusters[bestmatch],row):
+          bestmatch=i
+      print "best match for row[%s] in cluster[%s] [%s]" % (j, bestmatch, distance(clusters[bestmatch],row))
       bestmatches[bestmatch].append(j)
 
     # If the results are the same as last time, this is complete
@@ -225,7 +227,11 @@ def kcluster(rows,distance=pearson,k=4):
         for j in range(len(avgs)):
           avgs[j]/=len(bestmatches[i])
         clusters[i]=avgs
-      
+
+  v = 0
+  for cluster in clusters:
+    print "Center of cluster[%s]: %s" % (v, cluster)
+    v += 1
   return bestmatches
 
 def tanamoto(v1,v2):
@@ -309,7 +315,7 @@ with open('zebo.txt', 'r') as file:
       except ValueError:
         pass
     rows.append(the_row)
-  print kcluster(rows, distance=manhattan)
+  print kcluster(rows)
   # it is not strange, why cannot cluster any ...
   # http://www.zhaokv.com/2016/01/normalization-and-standardization.html
   # print kcluster(rows, distance=o_distance, k=8)
