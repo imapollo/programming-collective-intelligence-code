@@ -73,7 +73,16 @@ class crawler:
     splitter=re.compile('\\W*')
     return [s.lower() for s in splitter.split(text) if s!='']
 
-    
+  def separatewords2(self,text):
+    pattern = r'''(?x)
+        ([A-Z]\.)+
+      | \w+(-\w+)*
+      | \$?\d+(\.\d+)?%?
+      | \.\.\.
+      | [][.,;"'?():-_`]
+      '''
+    return re.findall(pattern,text)
+
   # Return true if this url is already indexed
   def isindexed(self,url):
     return False
@@ -304,3 +313,6 @@ class searcher:
     nnres=mynet.getresult(wordids,urlids)
     scores=dict([(urlids[i],nnres[i]) for i in range(len(urlids))])
     return self.normalizescores(scores)
+
+cr = crawler()
+print cr.separatewords2("abc abc")
